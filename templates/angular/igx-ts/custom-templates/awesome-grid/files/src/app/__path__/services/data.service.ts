@@ -7,7 +7,7 @@ interface IServiceResponse {
 }
 
 @Injectable()
-export class DataService {
+export class $(ClassName)DataService {
     private rndUsr: any[];
 
     constructor(private http: HttpClient) {

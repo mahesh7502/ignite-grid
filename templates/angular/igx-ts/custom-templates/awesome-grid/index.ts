@@ -22,7 +22,8 @@ class IgxGridAwesomeTemplate extends IgniteUIForAngularTemplate {
 					"IgxInputModule",
 					"IgxButtonModule"
 				]
-			}
+			},
+			{ provide: "$(ClassName)DataService", from: "./src/app/__path__/services/data.service.ts" }
 		];
 	}
 }
