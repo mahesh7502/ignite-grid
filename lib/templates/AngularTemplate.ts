@@ -24,9 +24,9 @@ export class AngularTemplate implements Template {
 	 */
 	constructor(private rootPath: string) {
 	}
-	public generateFiles(projectPath: string, name: string, options: {}): Promise<boolean> {
+	public async generateFiles(projectPath: string, name: string, options: { modulePath: string, [key: string]: any}) {
 		let config = {};
-		if (options["modulePath"] && !Util.fileExists(path.join(process.cwd(), `src\\app`, options["modulePath"]))) {
+		if (options["modulePath"] && !Util.fileExists(path.join(process.cwd(), `src/app`, options["modulePath"]))) {
 			Util.error(`Wrong module path provided: ${options["modulePath"]}. No components were added!`);
 			return Promise.resolve(false);
 		}
@@ -34,7 +34,7 @@ export class AngularTemplate implements Template {
 		if (options["extraConfig"]) {
 			config = options["extraConfig"];
 		}
-		Object.assign(config, this.getBaseVariables(name));
+		Object.assign(config, this.getBaseVariables(name, options));
 
 		const pathsConfig = {};
 		if (!Util.validateTemplate(path.join(this.rootPath, "files"), projectPath, config, pathsConfig)) {
@@ -60,8 +60,8 @@ export class AngularTemplate implements Template {
 		//for example: { path: 'combo', component: ComboComponent }
 		const routingModule = new TsUpdate(path.join(projectPath, "src/app/app-routing.module.ts"));
 		routingModule.addRoute(
-			path.join(projectPath, `src/app/components/${this.folderName(name)}/${this.fileName(name)}.component.ts`),
-			this.folderName(name), //path
+			path.join(projectPath, `src/app/components/${this.folderName(name, options)}/${this.fileName(name)}.component.ts`),
+			this.folderName(name, options), //path
 			name //text
 		);
 
@@ -69,7 +69,7 @@ export class AngularTemplate implements Template {
 		//4) populate the declarations portion of the @NgModule with the component class name.
 		const mainModule = new TsUpdate(path.join(projectPath, `src/app/${modulePath}`));
 		mainModule.addDeclaration(
-			path.join(projectPath, `src/app/components/${this.folderName(name)}/${this.fileName(name)}.component.ts`),
+			path.join(projectPath, `src/app/components/${this.folderName(name, options)}/${this.fileName(name)}.component.ts`),
 			modulePath !== "app.module.ts"
 		);
 		mainModule.finalize();
@@ -82,12 +82,12 @@ export class AngularTemplate implements Template {
 	}
 	public setExtraConfiguration(extraConfigKeys: {}) { }
 
-	protected getBaseVariables(name: string) {
+	protected getBaseVariables(name: string, options: {}) {
 		const config = {};
 		config["$(name)"] = name;
 		config["$(ClassName)"] = Util.className(name);
 		config["__name__"] = this.fileName(name);
-		config["__path__"] = this.folderName(name);
+		config["__path__"] = this.folderName(name, options);
 		config["$(filePrefix)"] = this.fileName(name);
 		config["$(description)"] = this.description;
 		config["$(cliVersion)"] = Util.version();
@@ -124,8 +124,11 @@ export class AngularTemplate implements Template {
 		}
 	}
 
-	protected folderName(name: string): string {
+	protected folderName(name: string, options: {}): string {
 		//TODO: should remove the spaces
+		if (options["modulePath"] && !options["flat"]) {
+			path.dirname(options["modulePath"]);
+		}
 		return Util.lowerDashed(name);
 	}
 

@@ -32,8 +32,14 @@ command = {
 		},
 		module: {
 			alias: "m",
-			description: "The module to which the template is to be added",
+			description: "The module to which the template is to be added. Only applicable to Angular projects.",
 			type: "string",
+			global: true
+		},
+		flat: {
+			description: "Add component to the app root instead of the --module folder. Only applicable to Angular projects.",
+			type: "boolean",
+			default: false,
 			global: true
 		}
 	},
