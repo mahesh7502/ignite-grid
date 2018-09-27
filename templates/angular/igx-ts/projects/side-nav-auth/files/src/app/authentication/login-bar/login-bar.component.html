@@ -1,0 +1,20 @@
+<button *ngIf="userService.currentUser === null" #loginButton igxRipple="white" igxButton="flat" igxButtonColor="white" (click)="openDialog()">Log In</button>
+<!-- <div class="loginBarContent"> -->
+  <button class="login-button" *ngIf="userService.currentUser !== null" #showOptions igxRipple="white" igxButton="flat" igxButtonBackground="#731963"
+    igxButtonColor="white" [igxToggleAction]="options">
+    <igx-avatar initials="IG" [src]="userService.currentUser.picture" [roundShape]="true" size="small" bgColor="white">
+    </igx-avatar>
+    <igx-icon name="keyboard_arrow_down"></igx-icon>
+  </button>
+<!-- </div> -->
+<igx-drop-down #options>
+  <div>
+    <igx-drop-down-item igxRipple="purple" (click)="openProfile()">
+      Profile
+    </igx-drop-down-item>
+    <igx-drop-down-item igxRipple="purple" (click)="handleLogout()">
+      Log Out
+    </igx-drop-down-item>
+  </div>
+</igx-drop-down>
+<app-login-dialog></app-login-dialog>
