@@ -23,7 +23,8 @@ import { ExternalAuthService } from './authentication/services/igx-auth.service'
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AuthenticationModule, // WARNING: `AuthenticationModule` defines child routes, must be imported before root `AppRoutingModule`
+    // NOTE: `AuthenticationModule` defines child routes, must be imported before root `AppRoutingModule`
+    AuthenticationModule,
     AppRoutingModule,
     IgxNavigationDrawerModule,
     IgxNavbarModule,
