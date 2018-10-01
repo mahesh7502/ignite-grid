@@ -1,9 +1,8 @@
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { UserService } from '../services/user.service';
-import { IRegister } from '../interfaces/register.interface';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
@@ -11,7 +10,7 @@ import { AuthenticationService } from '../services/authentication.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit, IRegister {
+export class RegisterComponent {
   name: string;
   email: string;
   password: string;
@@ -30,8 +29,6 @@ export class RegisterComponent implements OnInit, IRegister {
     });
   }
 
-  ngOnInit() { }
-
   tryRegister() {
     const response = this.authentication.register(this.registrationForm.value);
     if (response) {
@@ -42,10 +39,6 @@ export class RegisterComponent implements OnInit, IRegister {
   }
 
   showLoginForm() {
-    const loginForm = document.getElementById('loginForm');
-    const registrationForm = document.getElementById('registrationForm');
-    loginForm.hidden = false;
-    registrationForm.hidden = true;
     this.viewChange.emit();
   }
 }

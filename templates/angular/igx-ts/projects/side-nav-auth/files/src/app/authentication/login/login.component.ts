@@ -1,10 +1,7 @@
-import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
-import { ILogin } from '../interfaces/login.interface';
 import { UserService } from '../services/user.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.service';
@@ -14,37 +11,25 @@ import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy, ILogin {
+export class LoginComponent {
   email: string;
   password: string;
 
   public loginForm: FormGroup;
 
-  isAuthorized: boolean;
-  isAuthorizedSubscription: Subscription;
   apiResult: string;
 
   @Output() viewChange: EventEmitter<any> = new EventEmitter();
   @Output() loggedIn: EventEmitter<any> = new EventEmitter();
 
-  constructor(private oidcSecurityService: OidcSecurityService, private authService: ExternalAuthService,
-    private authentication: AuthenticationService, fb: FormBuilder, private userService: UserService, private router: Router
+  constructor(
+    private authService: ExternalAuthService, private authentication: AuthenticationService,
+    private userService: UserService, private router: Router, fb: FormBuilder
   ) {
-    this.isAuthorized = false;
     this.loginForm = fb.group({
-      id: [''],
       email: ['', Validators.required],
       password: ['', Validators.required],
     });
-  }
-
-  ngOnInit() {
-    this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized()
-      .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
-  }
-
-  ngOnDestroy() {
-    this.isAuthorizedSubscription.unsubscribe();
   }
 
   signUpG() {
@@ -70,10 +55,6 @@ export class LoginComponent implements OnInit, OnDestroy, ILogin {
   }
 
   showRegistrationForm() {
-    const loginForm = document.getElementById('loginForm');
-    const registrationForm = document.getElementById('registrationForm');
-    loginForm.hidden = true;
-    registrationForm.hidden = false;
     this.viewChange.emit();
   }
 }

@@ -1,6 +1,7 @@
-<igx-dialog #dialog (onOpen)="showLoginForm()" title="{{title}}" [closeOnOutsideSelect]="true">
-  <div class="sign-dialog">
-    <app-login (loggedIn)="closeDialog()" (viewChange)="changeTitle()"></app-login>
-    <app-register (registered)="closeDialog()" (viewChange)="changeTitle()"></app-register>
-  </div>
-</igx-dialog>
+<igx-dialog #dialog (onOpen)="showLoginForm()" [title]="title" [closeOnOutsideSelect]="true">
+	<div class="sign-dialog">
+	  <app-login *ngIf="showLogin" (loggedIn)="closeDialog()" (viewChange)="toggleView()"></app-login>
+	  <app-register *ngIf="!showLogin"  (registered)="closeDialog()" (viewChange)="toggleView()"></app-register>
+	</div>
+  </igx-dialog>
+  
