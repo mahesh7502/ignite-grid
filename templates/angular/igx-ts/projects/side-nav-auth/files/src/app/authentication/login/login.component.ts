@@ -45,12 +45,14 @@ export class LoginComponent {
     this.loggedIn.emit();
   }
 
-  tryLogin() {
-    const response = this.authentication.login(this.loginForm.value);
-    if (response) {
-      this.userService.setCurrentUser(response);
+  async tryLogin() {
+    const response = await this.authentication.login(this.loginForm.value);
+    if (!response.error) {
+      this.userService.setCurrentUser(response.user);
       this.router.navigate(['/profile']);
       this.loggedIn.emit();
+    } else {
+      alert(response.error);
     }
   }
 

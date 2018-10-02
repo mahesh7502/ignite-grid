@@ -57,7 +57,7 @@ export class BackendInterceptor implements HttpInterceptor {
 
     registerHandle(request: HttpRequest<any>, users: IUser[]) {
         const newUser = request.body as IUser;
-        newUser.token = this.generateToken();
+        newUser.token = this.generateToken(newUser);
         const duplicateUser = users.filter(user => user.email === newUser.email).length;
         if (duplicateUser) {
             return throwError({ error: { message: 'Account with email "' + newUser.email + '" already exists' } });
@@ -86,14 +86,19 @@ export class BackendInterceptor implements HttpInterceptor {
                 picture: user.picture
             };
 
-            return of(new HttpResponse({ status: 200, body: body }));
+            return of(new HttpResponse({ status: 200, body: this.generateToken(body) }));
         } else {
-            return throwError({ error: { message: 'User does not exist!' } });
+            return throwError({ status: 401, error: { message: 'User does not exist!' } });
         }
     }
 
-    private generateToken(): string {
-        return Math.random().toString(36).substring(6);
+    /** Note: This is used for example purposes only and does NOT generate a valid JWT w/ base64Url encoding */
+    private generateToken(payload: any): string {
+        const header = JSON.stringify({
+            alg: 'Mock',
+            typ: 'JWT'
+        });
+        return btoa(JSON.stringify(header)) + '.' + btoa(JSON.stringify(payload)) + '.mockSignature';
     }
 }
 
