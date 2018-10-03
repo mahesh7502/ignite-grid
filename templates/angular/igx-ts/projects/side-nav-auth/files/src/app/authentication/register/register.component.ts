@@ -4,6 +4,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { UserService } from '../services/user.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { Register } from '../interfaces/register.interface';
 
 @Component({
   selector: 'app-register',
@@ -23,18 +24,21 @@ export class RegisterComponent {
   constructor(private authentication: AuthenticationService,
     private fb: FormBuilder, private userService: UserService, private router: Router) {
     this.registrationForm = this.fb.group({
-      name: ['', Validators.nullValidator],
+      given_name: ['', Validators.required],
+      family_name: ['', Validators.nullValidator],
       email: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
 
-  tryRegister() {
-    const response = this.authentication.register(this.registrationForm.value);
-    if (response) {
-      this.userService.setCurrentUser(response);
+  async tryRegister() {
+    const response = await this.authentication.register(this.registrationForm.value as Register);
+    if (!response.error) {
+      this.userService.setCurrentUser(response.user);
       this.router.navigate(['/profile']);
       this.registered.emit();
+    } else {
+      alert(response.error);
     }
   }
 

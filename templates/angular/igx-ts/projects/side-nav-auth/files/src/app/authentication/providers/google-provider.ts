@@ -6,8 +6,8 @@ import {
     OpenIDImplicitFlowConfiguration
 } from 'angular-auth-oidc-client';
 import { IAuthProvider } from './IAuthProvider';
-import { IUser } from '../interfaces/user-model.interface';
 import { ExternalAuthConfig } from '../services/igx-auth.service';
+import { ExternalLogin } from '../interfaces/login.interface';
 
 export class GoogleProvider implements IAuthProvider {
     constructor(protected oidcConfigService: OidcConfigService, protected oidcSecurityService: OidcSecurityService,
@@ -43,9 +43,9 @@ export class GoogleProvider implements IAuthProvider {
     }
 
     public getUserInfo() {
-        let resolve: (val: IUser) => void;
+        let resolve: (val: ExternalLogin) => void;
         let reject: () => void;
-        const user = new Promise<IUser>((res, rej) => {
+        const user = new Promise<ExternalLogin>((res, rej) => {
             resolve = res;
             reject = rej;
         });
@@ -53,7 +53,7 @@ export class GoogleProvider implements IAuthProvider {
             this.config();
             this.oidcSecurityService.onAuthorizationResult.subscribe(() => {
                 this.oidcSecurityService.getUserData().subscribe(userData => {
-                    resolve(userData as IUser);
+                    resolve(this.formatUserData(userData));
                 });
             });
             this.oidcSecurityService.authorizedCallback();
@@ -66,5 +66,24 @@ export class GoogleProvider implements IAuthProvider {
         this.oidcSecurityService.logoff();
         // Should we expressly clear the Session storage?
         // window.sessionStorage.clear();
+    }
+
+    /**
+     * Format user data per provider claims:
+     * https://developers.google.com/identity/protocols/OpenIDConnect
+     * https://developers.google.com/+/web/api/rest/openidconnect/getOpenIdConnect
+     */
+    protected formatUserData(userData): ExternalLogin {
+        const login: ExternalLogin = {
+            id: userData.sub,
+            name: userData.name,
+            email: userData.email,
+            given_name: userData.given_name,
+            family_name: userData.family_name,
+            picture: userData.picture,
+            externalToken: this.oidcSecurityService.getToken()
+
+        };
+        return login;
     }
 }

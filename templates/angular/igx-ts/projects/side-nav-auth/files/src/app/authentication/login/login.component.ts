@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { FormBuilder, Validators, FormGroup, FormGroupDirective } from '@angular/forms';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 
 import { UserService } from '../services/user.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -12,12 +12,7 @@ import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  email: string;
-  password: string;
-
   public loginForm: FormGroup;
-
-  apiResult: string;
 
   @Output() viewChange: EventEmitter<any> = new EventEmitter();
   @Output() loggedIn: EventEmitter<any> = new EventEmitter();
@@ -50,6 +45,11 @@ export class LoginComponent {
     if (!response.error) {
       this.userService.setCurrentUser(response.user);
       this.router.navigate(['/profile']);
+      this.loginForm.reset();
+      // https://github.com/angular/angular/issues/15741
+      Object.keys(this.loginForm.controls).forEach(key => {
+        this.loginForm.controls[key].setErrors(null);
+      });
       this.loggedIn.emit();
     } else {
       alert(response.error);

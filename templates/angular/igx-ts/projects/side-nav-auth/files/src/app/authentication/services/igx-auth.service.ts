@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { OidcSecurityService, OidcConfigService } from 'angular-auth-oidc-client';
 
-import { IUser } from '../interfaces/user-model.interface';
 import { IAuthProvider } from '../providers/IAuthProvider';
 import { GoogleProvider } from '../providers/google-provider';
 import { FacebookProvider } from '../providers/facebook-provider';
 import { MicrosoftProvider } from '../providers/microsoft-provider';
 import { Location } from '@angular/common';
+import { ExternalLogin } from '../interfaces/login.interface';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -117,10 +117,12 @@ export class ExternalAuthService {
     }
 
     /** TODO, use setActiveProvider only? */
-    public getUserInfo(provider: ExternalAuthProvider): Promise<IUser> {
+    public async getUserInfo(provider: ExternalAuthProvider): Promise<ExternalLogin> {
         const extProvider = this.providers.get(provider);
         if (extProvider) {
-          return extProvider.getUserInfo();
+          const userInfo = await extProvider.getUserInfo();
+          userInfo.externalProvider = provider;
+          return userInfo;
         }
         return Promise.reject(null); // TODO ?
     }

@@ -11,30 +11,34 @@ import {
 } from '@angular/common/http';
 
 import msKeys from './microsoft-keys';
-import { IUser } from '../interfaces/user-model.interface';
+import { Register } from '../interfaces/register.interface';
+import { ExternalLogin } from '../interfaces/login.interface';
+import { UserJWT } from '../interfaces/user-model.interface';
 
 @Injectable({
     providedIn: 'root'
 })
 export class BackendInterceptor implements HttpInterceptor {
-    constructor() { }
+    users: StorageUser[];
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const users: IUser[] = JSON.parse(localStorage.getItem('users')) || [];
+        this.users = JSON.parse(localStorage.getItem('users')) || [];
         return of(null).pipe(mergeMap(() => {
             // login user
             if (request.url.endsWith('/login') && request.method === 'POST') {
-                return this.loginHandle(request, users);
+                return this.loginHandle(request);
             }
 
             // register user
             if (request.url.endsWith('/register') && request.method === 'POST') {
-                return this.registerHandle(request, users);
+                const user = this.getStorageUser(request);
+                return this.registerHandle(user);
             }
 
             // login user with external provider
             if (request.url.endsWith('/extlogin') && request.method === 'POST') {
-                return this.loginExt(request, users);
+                const user = this.getStorageExtUser(request);
+                return this.registerHandle(user, true);
             }
 
             // Microsoft-specific OIDC discovery URI
@@ -44,52 +48,78 @@ export class BackendInterceptor implements HttpInterceptor {
 
             return next.handle(request);
         }))
-            .pipe(materialize())
-            .pipe(dematerialize());
+        .pipe(materialize())
+        .pipe(dematerialize());
     }
 
-    loginExt(request: HttpRequest<any>, users: IUser[]) {
-        this.registerHandle(request, users);
-        const userData = this.loginHandle(request, users);
-
-        return of(new HttpResponse({ status: 200, body: userData }));
-    }
-
-    registerHandle(request: HttpRequest<any>, users: IUser[]) {
-        const newUser = request.body as IUser;
-        newUser.token = this.generateToken(newUser);
-        const duplicateUser = users.filter(user => user.email === newUser.email).length;
-        if (duplicateUser) {
+    registerHandle(newUser: StorageUser, update = false) {
+        const duplicateUser = this.users.find(user => user.email === newUser.email);
+        if (duplicateUser && !update) {
             return throwError({ error: { message: 'Account with email "' + newUser.email + '" already exists' } });
         }
+        if (update && duplicateUser) {
+            Object.assign(duplicateUser, newUser);
+        } else {
+            this.users.push(newUser);
+        }
+        localStorage.setItem('users', JSON.stringify(this.users));
 
-        // if the user is from an external provider use their id, otherwise generate new one
-        newUser.id = newUser.id ? newUser.id : users.length + 1;
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
+        const body = this.getUserJWT(newUser);
 
-        return of(new HttpResponse({ status: 200, body: newUser }));
+        return of(new HttpResponse({ status: 200, body: this.generateToken(body) }));
     }
 
-    loginHandle(request: HttpRequest<any>, users: IUser[]) {
-        const filteredUsers = users.filter(user => {
+    loginHandle(request: HttpRequest<any>) {
+        const foundUser = this.users.find(user => {
             return user.email === request.body.email;
         });
         // authenticate
-        if (filteredUsers.length) {
-            const user: IUser = filteredUsers[0];
-            const body: IUser = {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                token: user.token,
-                picture: user.picture
-            };
+        if (foundUser) {
+            const body = this.getUserJWT(foundUser);
 
             return of(new HttpResponse({ status: 200, body: this.generateToken(body) }));
         } else {
             return throwError({ status: 401, error: { message: 'User does not exist!' } });
         }
+    }
+
+    private getStorageUser(request: HttpRequest<any>): StorageUser {
+        const user = request.body as Register;
+        let fullName = user.given_name;
+        fullName += user.family_name ? ` ${user.family_name}` : '';
+        return {
+            id: String(this.users.length + 1),
+            name: fullName,
+            email: user.email,
+            given_name: user.given_name,
+            family_name: user.family_name,
+            picture: ''
+        };
+    }
+
+    private getStorageExtUser(request: HttpRequest<any>): StorageUser {
+        const user = request.body as ExternalLogin;
+        return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            given_name: user.given_name || user.name.split(' ').shift(),
+            family_name: user.family_name || user.name.split(' ').pop(),
+            picture: user.picture,
+            externalToken: user.externalToken,
+            externalProvider: user.externalProvider
+        };
+    }
+
+    private getUserJWT(user: StorageUser): UserJWT {
+        return {
+            exp: Math.floor(new Date().getTime() / 1000) + (7 * 24 * 60 * 60),
+            name: user.name,
+            given_name: user.given_name,
+            family_name: user.family_name,
+            email: user.email,
+            picture: user.picture
+        };
     }
 
     /** Note: This is used for example purposes only and does NOT generate a valid JWT w/ base64Url encoding */
@@ -100,6 +130,17 @@ export class BackendInterceptor implements HttpInterceptor {
         });
         return btoa(JSON.stringify(header)) + '.' + btoa(JSON.stringify(payload)) + '.mockSignature';
     }
+}
+
+interface StorageUser {
+    id: string;
+    name: string;
+    email: string;
+    given_name: string;
+    family_name: string;
+    picture?: string;
+    externalToken?: string;
+    externalProvider?: string;
 }
 
 export const BackendProvider = {

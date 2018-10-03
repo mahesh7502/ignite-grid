@@ -1,62 +1,59 @@
-import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { OnInit, OnDestroy, Injectable } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { Injectable } from '@angular/core';
 
-import { IUser } from '../interfaces/user-model.interface';
-import { ILogin } from '../interfaces/login.interface';
+import { User, LoginResult } from '../interfaces/user-model.interface';
+import { Login, ExternalLogin } from '../interfaces/login.interface';
+import { Register } from '../interfaces/register.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationService implements OnInit, OnDestroy {
-  isAuthorized: boolean;
-  isAuthorizedSubscription: Subscription;
+export class AuthenticationService {
 
-  constructor(private http: HttpClient, private oidcSecurityService: OidcSecurityService) {
-    this.isAuthorized = false;
-  }
+  constructor(private http: HttpClient) {}
 
-  ngOnInit() {
-    this.isAuthorizedSubscription = this.oidcSecurityService.getIsAuthorized()
-      .subscribe(isAuthorized => this.isAuthorized = isAuthorized);
-  }
-
-  ngOnDestroy() {
-    this.isAuthorizedSubscription.unsubscribe();
-  }
-
-  public async login(userData: ILogin): Promise<{user?, error?}> {
-    let data;
+  public async login(userData: Login): Promise<LoginResult> {
+    let data: string;
     try {
-      data = await this.http.post('/login', userData).toPromise();
+      data = <string> await this.http.post('/login', userData).toPromise();
     } catch (e) {
       return { error: e.error.message };
     }
-    return { user: this.decodeJWT(data as string) };
+    const user = this.parseUser(data);
+    return { user };
   }
 
-  public loginWith(userInfo: IUser) {
-    return this.http.post('/extlogin', userInfo);
+  public async loginWith(userInfo: ExternalLogin): Promise<LoginResult> {
+    let data: string;
+    try {
+      data = <string> await this.http.post('/extlogin', userInfo).toPromise();
+    } catch (e) {
+      return { error: e.error.message };
+    }
+    const user = this.parseUser(data);
+    return { user };
   }
 
-  public register(userData: IUser) {
-    let data;
-    this.http
-      .post('/register', userData)
-      .subscribe(
-        suc => {
-          data = this.login(suc as IUser);
-        },
-        fail => {
-          alert(fail.error.message);
-        }
-      );
-
-    return data;
+  public async register(userData: Register): Promise<LoginResult> {
+    let data: string;
+    try {
+      data = <string> await this.http.post('/register', userData).toPromise();
+    } catch (e) {
+      return { error: e.error.message };
+    }
+    const user = this.parseUser(data);
+    return { user };
   }
 
   //#region JWT util
+  protected parseUser(jwt: string): User {
+    const token = this.decodeJWT(jwt);
+    const user = JSON.parse(token.payload) as User;
+    // store token:
+    user.token = jwt;
+    return user;
+  }
+
   protected decodeJWT(str: string) {
     const parts = str.split('.');
     if (parts.length < 2) {

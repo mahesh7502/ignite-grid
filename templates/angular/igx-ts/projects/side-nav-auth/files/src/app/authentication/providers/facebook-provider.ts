@@ -1,11 +1,11 @@
 import { Router } from '@angular/router';
 
 import { IAuthProvider } from './IAuthProvider';
-import { IUser } from '../interfaces/user-model.interface';
-import { ExternalAuthConfig } from '../services/igx-auth.service';
+import { ExternalAuthConfig, ExternalAuthProvider } from '../services/igx-auth.service';
+import { ExternalLogin } from '../interfaces/login.interface';
 
 export class FacebookProvider implements IAuthProvider {
-    private user: IUser;
+    private user: ExternalLogin;
 
     constructor(private externalStsConfig: ExternalAuthConfig, private router: Router) { }
 
@@ -27,7 +27,15 @@ export class FacebookProvider implements IAuthProvider {
                 FB.api(
                     '/me?fields=id,email,name,first_name,last_name,picture',
                     (newResponse) => {
-                        this.user = newResponse;
+                        this.user = {
+                            id: newResponse.id,
+                            name: newResponse.name,
+                            given_name: newResponse.first_name,
+                            family_name: newResponse.last_name,
+                            email: newResponse.email,
+                            picture: newResponse.picture,
+                            externalToken: FB.getAuthResponse()['accessToken']
+                        };
                         self.router.navigate([this.externalStsConfig.redirect_url]);
                     });
             } else {
@@ -36,7 +44,7 @@ export class FacebookProvider implements IAuthProvider {
         }, { scope: 'public_profile' });
     }
 
-    public getUserInfo(): Promise<IUser> {
+    public getUserInfo(): Promise<ExternalLogin> {
         return Promise.resolve(this.user);
     }
 

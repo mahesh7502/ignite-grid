@@ -6,6 +6,7 @@ import {
 } from 'angular-auth-oidc-client';
 
 import { GoogleProvider } from './google-provider';
+import { ExternalLogin } from '../interfaces/login.interface';
 
 export class MicrosoftProvider extends GoogleProvider {
     public static redurectURL = 'ms-discovery/keys';
@@ -31,5 +32,20 @@ export class MicrosoftProvider extends GoogleProvider {
         // https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc
         this.oidcConfigService.wellKnownEndpoints.jwks_uri = MicrosoftProvider.redurectURL;
         super.config();
+    }
+
+    /**
+     * Format user data response from available claims:
+     * https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens#payload-claims
+     */
+    protected formatUserData(userData): ExternalLogin {
+        const login: ExternalLogin = {
+            id: userData.oid,
+            name: userData.name,
+            email: userData.email,
+            externalToken: this.oidcSecurityService.getToken()
+
+        };
+        return login;
     }
 }

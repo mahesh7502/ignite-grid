@@ -1,7 +1,11 @@
 <form class="input-group-form" id="registrationForm" [formGroup]="registrationForm" (ngSubmit)="tryRegister()">
   <igx-input-group>
-    <label igxLabel for="name">Name</label>
-    <input igxInput id="name" name="name" formControlName="name" type="text" />
+    <label igxLabel for="given_name">First Name</label>
+    <input igxInput id="given_name" name="given_name" formControlName="given_name" type="text" />
+  </igx-input-group>
+  <igx-input-group>
+    <label igxLabel for="family_name">Last Name</label>
+    <input igxInput id="family_name" name="family_name" formControlName="family_name" type="text" />
   </igx-input-group>
   <igx-input-group>
     <label igxLabel for="email">Email</label>

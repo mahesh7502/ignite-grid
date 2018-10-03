@@ -1,8 +1,8 @@
-import { IUser } from '../interfaces/user-model.interface';
+import { ExternalLogin } from '../interfaces/login.interface';
 
 export interface IAuthProvider {
   config();
   login();
-  getUserInfo(): Promise<IUser>;
+  getUserInfo(): Promise<ExternalLogin>;
   logout();
 }
