@@ -19,8 +19,8 @@
     <a id="register" (click)="showRegistrationForm($event)">Create new account?</a>
   </div>
   <div class="social-login">
-    <button type="button" *ngIf="this.authService.has('Facebook')" class="facebook" igxButton="raised" (click)="signUpFb()">Sign Up Facebook</button>
-    <button type="button" *ngIf="this.authService.has('Google')" class="google" igxButton="raised" (click)="signUpG()">Sign Up Google</button>
-    <button type="button" *ngIf="this.authService.has('Microsoft')" class="microsoft" igxButton="raised" (click)="signUpMS()">Sign Up Microsoft</button>
+    <button type="button" *ngIf="this.authService.has(providers.Facebook)" class="facebook" igxButton="raised" (click)="signUpFb()">Sign Up Facebook</button>
+    <button type="button" *ngIf="this.authService.has(providers.Google)" class="google" igxButton="raised" (click)="signUpG()">Sign Up Google</button>
+    <button type="button" *ngIf="this.authService.has(providers.Microsoft)" class="microsoft" igxButton="raised" (click)="signUpMS()">Sign Up Microsoft</button>
   </div>
 </form>

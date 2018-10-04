@@ -18,7 +18,7 @@ import { AuthModule, OidcConfigService, } from 'angular-auth-oidc-client';
 import {
   IgxDialogModule, IgxIconModule,
   IgxInputGroupModule, IgxButtonModule,
-  IgxAvatarModule, IgxToggleModule, IgxDropDownModule
+  IgxAvatarModule, IgxToggleModule, IgxDropDownModule, IgxRippleModule
 } from 'igniteui-angular';
 
 @NgModule({
@@ -29,6 +29,7 @@ import {
     AuthModule.forRoot(),
     AuthenticationRoutingModule,
     IgxToggleModule,
+    IgxRippleModule,
     IgxDialogModule,
     IgxInputGroupModule,
     IgxIconModule,

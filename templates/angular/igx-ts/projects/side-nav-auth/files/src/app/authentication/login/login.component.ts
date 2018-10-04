@@ -13,12 +13,12 @@ import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.
 })
 export class LoginComponent {
   public loginForm: FormGroup;
-
-  @Output() viewChange: EventEmitter<any> = new EventEmitter();
-  @Output() loggedIn: EventEmitter<any> = new EventEmitter();
+  @Output() public viewChange: EventEmitter<any> = new EventEmitter();
+  @Output() public loggedIn: EventEmitter<any> = new EventEmitter();
+  public providers = ExternalAuthProvider;
 
   constructor(
-    private authService: ExternalAuthService, private authentication: AuthenticationService,
+    public authService: ExternalAuthService, private authentication: AuthenticationService,
     private userService: UserService, private router: Router, fb: FormBuilder
   ) {
     this.loginForm = fb.group({
@@ -27,6 +27,9 @@ export class LoginComponent {
     });
   }
 
+  hasGoogle() {
+    return this.authService.has(ExternalAuthProvider.Google);
+  }
   signUpG() {
     this.authService.login(ExternalAuthProvider.Google);
   }
