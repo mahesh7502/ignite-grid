@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
-import { FormBuilder, Validators, FormGroup, FormGroupDirective } from '@angular/forms';
-import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 import { UserService } from '../services/user.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -15,6 +15,7 @@ export class LoginComponent {
   public loginForm: FormGroup;
   @Output() public viewChange: EventEmitter<any> = new EventEmitter();
   @Output() public loggedIn: EventEmitter<any> = new EventEmitter();
+  /** expose to template */
   public providers = ExternalAuthProvider;
 
   constructor(
@@ -27,9 +28,6 @@ export class LoginComponent {
     });
   }
 
-  hasGoogle() {
-    return this.authService.has(ExternalAuthProvider.Google);
-  }
   signUpG() {
     this.authService.login(ExternalAuthProvider.Google);
   }

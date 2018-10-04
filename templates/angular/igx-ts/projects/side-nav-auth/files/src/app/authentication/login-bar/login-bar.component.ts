@@ -28,7 +28,7 @@ export class LoginBarComponent {
   }
 
   menuSelect(args: ISelectionEventArgs) {
-    // TODO: Use item value
+    // TODO: Use item value, swap to menu component in the future
     switch (args.newSelection.index) {
       case 0:
         this.router.navigate(['/profile']);
@@ -37,6 +37,5 @@ export class LoginBarComponent {
         this.handleLogout();
         break;
     }
-    this.igxDropDown.setSelectedItem(-1);
   }
 }

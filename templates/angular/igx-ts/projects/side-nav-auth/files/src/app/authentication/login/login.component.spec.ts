@@ -8,12 +8,14 @@ import { AuthenticationService } from '../services/authentication.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { UserService } from '../services/user.service';
 
-fdescribe('LoginComponent', () => {
+describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   const extAuthSpy = jasmine.createSpyObj('ExternalAuthService', ['login', 'has']);
   const authSpy = jasmine.createSpyObj('AuthenticationService', ['login']);
+  const userServSpy = jasmine.createSpyObj('UserService', ['setCurrentUser']);
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -21,7 +23,8 @@ fdescribe('LoginComponent', () => {
       declarations: [ LoginComponent ],
       providers: [
         { provide: ExternalAuthService, useValue: extAuthSpy },
-        { provide: AuthenticationService, useValue: authSpy }
+        { provide: AuthenticationService, useValue: authSpy },
+        { provide: UserService, useValue: userServSpy }
       ]
     })
     .compileComponents();
@@ -37,18 +40,32 @@ fdescribe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should submit login data', () => {
+  it('should submit login data',  async () => {
     expect(component.loginForm.valid).toBeFalsy();
     component.loginForm.controls['email'].setValue('test@example.com');
     expect(component.loginForm.valid).toBeFalsy();
     component.loginForm.controls['password'].setValue('123456');
     expect(component.loginForm.valid).toBeTruthy();
-    component.tryLogin();
+    spyOn(component.loggedIn, 'emit');
+    authSpy.login.and.returnValue(Promise.resolve({
+      error: null,
+      user: { name: 'TEST' }
+    }));
+    await component.tryLogin();
     expect(authSpy.login).toHaveBeenCalledTimes(1);
     expect(authSpy.login).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: '123456'
     });
+    expect(userServSpy.setCurrentUser).toHaveBeenCalledWith({name: 'TEST'});
+    expect(component.loggedIn.emit).toHaveBeenCalled();
+
+    authSpy.login.and.returnValue(Promise.resolve({
+      error: 'Err'
+    }));
+    spyOn(window, 'alert');
+    await component.tryLogin();
+    expect(window.alert).toHaveBeenCalledWith('Err');
   });
 
   it('should enable external auth buttons when configured', () => {
@@ -66,13 +83,17 @@ fdescribe('LoginComponent', () => {
     expect(fixture.debugElement.query(By.css('button.microsoft'))).toBeNull();
   });
 
-  it('external auth buttons should call correct login', () => {
+  it('should call correct external auth login per button', () => {
     (extAuthSpy.has as jasmine.Spy).and.returnValue(true);
     fixture.detectChanges();
+    spyOn(component.loggedIn, 'emit');
     fixture.debugElement.query(By.css('button.facebook')).nativeElement.click();
     expect(extAuthSpy.login).toHaveBeenCalledWith(ExternalAuthProvider.Facebook);
+    expect(component.loggedIn.emit).toHaveBeenCalled();
+
     fixture.debugElement.query(By.css('button.google')).nativeElement.click();
     expect(extAuthSpy.login).toHaveBeenCalledWith(ExternalAuthProvider.Google);
+
     fixture.debugElement.query(By.css('button.microsoft')).nativeElement.click();
     expect(extAuthSpy.login).toHaveBeenCalledWith(ExternalAuthProvider.Microsoft);
   });
