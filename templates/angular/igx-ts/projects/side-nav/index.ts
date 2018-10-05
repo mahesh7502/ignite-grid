@@ -18,6 +18,7 @@ export class EmptyJsBlocksProject extends BaseIgxProject implements ProjectTempl
 			"$(cliVersion)": Util.version(),
 			"$(dash-name)": Util.lowerDashed(name),
 			"$(name)": name,
+			"$(projectTemplate)": this.id,
 			"$(theme)": theme,
 			"__path__": name
 		};
