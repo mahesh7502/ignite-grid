@@ -1,13 +1,15 @@
+import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { IgxInputGroupModule, IgxButtonModule, IgxRippleModule, IgxIconModule } from 'igniteui-angular';
 
 import { LoginComponent } from './login.component';
-import { IgxInputGroupModule, IgxButtonModule, IgxRippleModule, IgxIconModule } from 'igniteui-angular';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
 import { UserService } from '../services/user.service';
 
 describe('LoginComponent', () => {
@@ -41,6 +43,8 @@ describe('LoginComponent', () => {
   });
 
   it('should submit login data',  async () => {
+    const router: Router = TestBed.get(Router);
+    spyOn(router, 'navigate');
     expect(component.loginForm.valid).toBeFalsy();
     component.loginForm.controls['email'].setValue('test@example.com');
     expect(component.loginForm.valid).toBeFalsy();
@@ -59,6 +63,7 @@ describe('LoginComponent', () => {
     });
     expect(userServSpy.setCurrentUser).toHaveBeenCalledWith({name: 'TEST'});
     expect(component.loggedIn.emit).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/profile']);
 
     authSpy.login.and.returnValue(Promise.resolve({
       error: 'Err'

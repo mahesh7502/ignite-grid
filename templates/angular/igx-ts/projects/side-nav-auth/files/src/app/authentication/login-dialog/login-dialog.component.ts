@@ -15,12 +15,12 @@ export class LoginDialogComponent {
     this.loginDialog.open();
   }
 
-  showLoginForm () {
-    this.showLogin = true;
+  close() {
+    this.loginDialog.close();
   }
 
-  closeDialog() {
-    this.loginDialog.close();
+  onOpen () {
+    this.showLogin = true;
   }
 
   toggleView() {

@@ -20,7 +20,7 @@ import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { LoginBarComponent } from './login-bar.component';
 import { UserService } from '../services/user.service';
 
-fdescribe('LoginBarComponent', () => {
+describe('LoginBarComponent', () => {
   let component: LoginBarComponent;
   let fixture: ComponentFixture<LoginBarComponent>;
   class TestUserServSpy {
