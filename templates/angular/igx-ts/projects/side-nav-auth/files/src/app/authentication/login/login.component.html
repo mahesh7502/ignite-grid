@@ -1,14 +1,14 @@
 <form id="loginForm" [formGroup]="loginForm" (ngSubmit)="tryLogin()">
   <igx-input-group>
     <igx-prefix>
-      <igx-icon name="account_circle"></igx-icon>
+      <igx-icon>account_circle</igx-icon>
     </igx-prefix>
     <label igxLabel for="email">Email</label>
     <input igxInput id="loginEmail" name="email" formControlName="email" type="text" />
   </igx-input-group>
   <igx-input-group>
     <igx-prefix>
-      <igx-icon name="lock"></igx-icon>
+      <igx-icon>lock</igx-icon>
     </igx-prefix>
     <input igxInput id="loginPassword" name="password" type="password" formControlName="password" />
     <label igxLabel for="password">Password</label>
