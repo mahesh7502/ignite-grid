@@ -11,9 +11,9 @@ import {
 } from '@angular/common/http';
 
 import msKeys from './microsoft-keys';
-import { Register } from '../interfaces/register.interface';
-import { ExternalLogin } from '../interfaces/login.interface';
-import { UserJWT } from '../interfaces/user-model.interface';
+import { Register } from '../models/register';
+import { ExternalLogin } from '../models/login';
+import { UserJWT } from '../models/user';
 
 @Injectable({
     providedIn: 'root'

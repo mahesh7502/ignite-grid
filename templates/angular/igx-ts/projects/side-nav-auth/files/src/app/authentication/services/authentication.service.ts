@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { User, LoginResult } from '../interfaces/user-model.interface';
-import { Login, ExternalLogin } from '../interfaces/login.interface';
-import { Register } from '../interfaces/register.interface';
+import { User, LoginResult } from '../models/user';
+import { Login, ExternalLogin } from '../models/login';
+import { Register } from '../models/register';
 import { parseUser } from './jwt-util';
 
 @Injectable({

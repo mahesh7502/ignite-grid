@@ -6,7 +6,7 @@ import {
 } from 'angular-auth-oidc-client';
 
 import { GoogleProvider } from './google-provider';
-import { ExternalLogin } from '../interfaces/login.interface';
+import { ExternalLogin } from '../models/login';
 
 export class MicrosoftProvider extends GoogleProvider {
     public static redurectURL = 'ms-discovery/keys';

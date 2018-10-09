@@ -1,4 +1,4 @@
-import { ExternalLogin } from '../interfaces/login.interface';
+import { ExternalLogin } from '../models/login';
 
 export interface IAuthProvider {
   config();

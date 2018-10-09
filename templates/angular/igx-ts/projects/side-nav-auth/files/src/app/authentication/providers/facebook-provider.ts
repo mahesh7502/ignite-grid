@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 
 import { IAuthProvider } from './IAuthProvider';
 import { ExternalAuthConfig, ExternalAuthProvider } from '../services/igx-auth.service';
-import { ExternalLogin } from '../interfaces/login.interface';
+import { ExternalLogin } from '../models/login';
 
 export class FacebookProvider implements IAuthProvider {
     private user: ExternalLogin;

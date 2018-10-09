@@ -4,7 +4,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { UserService } from '../services/user.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { Register } from '../interfaces/register.interface';
+import { Register } from '../models/register';
 
 @Component({
   selector: 'app-register',

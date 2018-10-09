@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { User } from '../interfaces/user-model.interface';
+import { User } from '../models/user';
 
 const USER_TOKEN = 'currentUser';
 

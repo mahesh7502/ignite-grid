@@ -1,4 +1,4 @@
-import { User } from '../interfaces/user-model.interface';
+import { User } from '../models/user';
 
 export function parseUser(jwt: string): User {
   const token = decodeJWT(jwt);

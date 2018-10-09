@@ -7,7 +7,7 @@ import { GoogleProvider } from '../providers/google-provider';
 import { FacebookProvider } from '../providers/facebook-provider';
 import { MicrosoftProvider } from '../providers/microsoft-provider';
 import { Location } from '@angular/common';
-import { ExternalLogin } from '../interfaces/login.interface';
+import { ExternalLogin } from '../models/login';
 
 export enum ExternalAuthProvider {
     Facebook = 'Facebook',
@@ -38,7 +38,7 @@ export interface ExternalAuthConfig {
     providedIn: 'root'
 })
 export class ExternalAuthService {
-    activeProvider: ExternalAuthProvider;
+    protected activeProvider: ExternalAuthProvider;
     protected providers: Map<ExternalAuthProvider, IAuthProvider> = new Map();
 
     constructor(
@@ -48,8 +48,11 @@ export class ExternalAuthService {
         private location: Location) {
     }
 
-    public has(provider: ExternalAuthProvider) {
-      return this.providers.has(provider);
+    public hasProvider(provider?: ExternalAuthProvider) {
+      if (provider) {
+        return this.providers.has(provider);
+      }
+      return this.providers.size > 0;
     }
 
     public addGoogle(client_id: string) {
