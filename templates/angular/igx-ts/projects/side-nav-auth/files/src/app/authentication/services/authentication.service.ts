@@ -6,6 +6,7 @@ import { Login, ExternalLogin } from '../models/login';
 import { Register } from '../models/register';
 import { parseUser } from './jwt-util';
 
+/** Authentication API Service */
 @Injectable({
   providedIn: 'root'
 })
@@ -13,6 +14,7 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) {}
 
+  /** Send basic credentials to login endpoint. */
   public async login(userData: Login): Promise<LoginResult> {
     let data: string;
     try {
@@ -24,6 +26,7 @@ export class AuthenticationService {
     return { user };
   }
 
+  /** Send user info from 3rd party provider to external login endpoint. */
   public async loginWith(userInfo: ExternalLogin): Promise<LoginResult> {
     let data: string;
     try {
@@ -35,6 +38,7 @@ export class AuthenticationService {
     return { user };
   }
 
+  /** Send user info to register endpoint. */
   public async register(userData: Register): Promise<LoginResult> {
     let data: string;
     try {

@@ -11,7 +11,7 @@ export class UserService {
   constructor() { }
 
   private _currentUser: User;
-  /** Current logged in user, if anyks */
+  /** Current logged in user, if any */
   public get currentUser(): User {
     if (!this._currentUser) {
       this._currentUser = JSON.parse(localStorage.getItem(USER_TOKEN));
@@ -20,8 +20,8 @@ export class UserService {
     return this._currentUser;
   }
 
-  /** Initials of the current user */
-  public get initials() {
+  /** Initials of the current user, if any */
+  public get initials(): string {
     if (!this.currentUser) {
       return null;
     }
@@ -32,13 +32,13 @@ export class UserService {
     return initials;
   }
 
+  /** Save new login as current user */
   public setCurrentUser(user: User) {
     localStorage.setItem(USER_TOKEN, JSON.stringify(user));
     this._currentUser = user;
   }
 
-
-
+  /** Clear current user */
   public logout() {
     this._currentUser = null;
     localStorage.removeItem(USER_TOKEN);

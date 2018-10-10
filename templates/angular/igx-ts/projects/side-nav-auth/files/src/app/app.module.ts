@@ -37,8 +37,8 @@ export class AppModule {
 
   constructor(private externalAuthService: ExternalAuthService) {
     /**
-     * Un-comment one or more of the following providers and and you service provider Client ID.
-     * See <WIKI LINK> for more.
+     * Un-comment one or more of the following providers and add your service provider Client ID.
+	 * See <WIKI LINK> for more.
      */
     // this.externalAuthService.addGoogle('<CLIENT_ID>');
 
