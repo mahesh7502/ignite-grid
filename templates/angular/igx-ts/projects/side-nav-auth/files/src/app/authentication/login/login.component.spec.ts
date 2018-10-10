@@ -8,14 +8,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { IgxInputGroupModule, IgxButtonModule, IgxRippleModule, IgxIconModule } from 'igniteui-angular';
 
 import { LoginComponent } from './login.component';
-import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.service';
+import { ExternalAuthService, ExternalAuthProvider } from '../services/external-auth.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { UserService } from '../services/user.service';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  const extAuthSpy = jasmine.createSpyObj('ExternalAuthService', ['login', 'has']);
+  const extAuthSpy = jasmine.createSpyObj('ExternalAuthService', ['login', 'hasProvider']);
   const authSpy = jasmine.createSpyObj('AuthenticationService', ['login']);
   const userServSpy = jasmine.createSpyObj('UserService', ['setCurrentUser']);
 
@@ -75,8 +75,8 @@ describe('LoginComponent', () => {
 
   it('should enable external auth buttons when configured', () => {
     let activeProvider = ExternalAuthProvider.Facebook;
-    const has = (provider: ExternalAuthProvider) => provider === activeProvider;
-    (extAuthSpy.has as jasmine.Spy).and.callFake(has);
+    const has = (provider: ExternalAuthProvider) => provider ? provider === activeProvider : true;
+    (extAuthSpy.hasProvider as jasmine.Spy).and.callFake(has);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('button.facebook'))).toEqual(jasmine.any(DebugElement));
     expect(fixture.debugElement.query(By.css('button.google'))).toBeNull();
@@ -89,7 +89,7 @@ describe('LoginComponent', () => {
   });
 
   it('should call correct external auth login per button', () => {
-    (extAuthSpy.has as jasmine.Spy).and.returnValue(true);
+    (extAuthSpy.hasProvider as jasmine.Spy).and.returnValue(true);
     fixture.detectChanges();
     spyOn(component.loggedIn, 'emit');
     fixture.debugElement.query(By.css('button.facebook')).nativeElement.click();

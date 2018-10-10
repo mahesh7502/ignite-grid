@@ -3,7 +3,7 @@ import { UserService } from '../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthenticationService } from '../services/authentication.service';
-import { ExternalAuthProvider, ExternalAuthService } from '../services/igx-auth.service';
+import { ExternalAuthProvider, ExternalAuthService } from '../services/external-auth.service';
 import { ExternalLogin } from '../models/login';
 
 @Component({

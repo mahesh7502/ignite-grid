@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { RedirectComponent } from './redirect.component';
 import { UserService } from '../services/user.service';
-import { ExternalAuthService } from '../services/igx-auth.service';
+import { ExternalAuthService } from '../services/external-auth.service';
 import { AuthenticationService } from '../services/authentication.service';
 
 describe('RedirectComponent', () => {

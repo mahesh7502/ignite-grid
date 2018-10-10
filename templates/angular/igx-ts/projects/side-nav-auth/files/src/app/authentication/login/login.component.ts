@@ -4,7 +4,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { UserService } from '../services/user.service';
 import { AuthenticationService } from '../services/authentication.service';
-import { ExternalAuthService, ExternalAuthProvider } from '../services/igx-auth.service';
+import { ExternalAuthService, ExternalAuthProvider } from '../services/external-auth.service';
 
 @Component({
   selector: 'app-login',

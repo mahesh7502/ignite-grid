@@ -11,8 +11,7 @@ import {
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthenticationModule } from './authentication/authentication.module';
-import { ExternalAuthService } from './authentication/services/igx-auth.service';
+import { AuthenticationModule, ExternalAuthService } from './authentication';
 
 @NgModule({
   declarations: [

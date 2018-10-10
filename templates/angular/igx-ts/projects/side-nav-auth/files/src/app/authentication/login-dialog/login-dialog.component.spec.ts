@@ -6,6 +6,15 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { IgxDialogModule } from 'igniteui-angular';
 import { LoginDialogComponent } from './login-dialog.component';
 
+@Component({
+  selector: 'app-login, app-register',
+  template: ''
+})
+class TestSignViewComponent {
+  @Output() public viewChange = new EventEmitter();
+  @Output() public loggedIn = new EventEmitter();
+  @Output() public registered = new EventEmitter();
+}
 
 describe('LoginDialogComponent', () => {
   let component: LoginDialogComponent;
@@ -65,13 +74,3 @@ describe('LoginDialogComponent', () => {
     expect(component.loginDialog.close).toHaveBeenCalledTimes(2);
   });
 });
-
-@Component({
-  selector: 'app-login, app-register',
-  template: ''
-})
-class TestSignViewComponent {
-  @Output() public viewChange = new EventEmitter();
-  @Output() public loggedIn = new EventEmitter();
-  @Output() public registered = new EventEmitter();
-}

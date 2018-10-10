@@ -20,6 +20,14 @@ import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { LoginBarComponent } from './login-bar.component';
 import { UserService } from '../services/user.service';
 
+@Component({
+  selector: 'app-login-dialog',
+  template: ''
+})
+class TestLoginDialogComponent extends LoginDialogComponent {
+  open() {  }
+}
+
 describe('LoginBarComponent', () => {
   let component: LoginBarComponent;
   let fixture: ComponentFixture<LoginBarComponent>;
@@ -113,12 +121,3 @@ describe('LoginBarComponent', () => {
     expect(userServ.logout).toHaveBeenCalled();
   });
 });
-
-
-@Component({
-  selector: 'app-login-dialog',
-  template: ''
-})
-class TestLoginDialogComponent extends LoginDialogComponent {
-  open() {  }
-}

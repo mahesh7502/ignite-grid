@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { IgxInputGroupModule, IgxButtonModule, IgxRippleModule } from 'igniteui-angular';
+import { IgxInputGroupModule, IgxButtonModule, IgxRippleModule, IgxIconModule } from 'igniteui-angular';
 
 import { RegisterComponent } from './register.component';
 import { AuthenticationService } from '../services/authentication.service';
@@ -16,7 +16,7 @@ describe('RegisterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ ReactiveFormsModule, RouterTestingModule, IgxInputGroupModule, IgxButtonModule, IgxRippleModule ],
+      imports: [ ReactiveFormsModule, RouterTestingModule, IgxInputGroupModule, IgxButtonModule, IgxIconModule, IgxRippleModule ],
       declarations: [ RegisterComponent ],
       providers: [
         { provide: AuthenticationService, useValue: authSpy },

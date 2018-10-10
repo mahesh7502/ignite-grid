@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 
 import { IAuthProvider } from './IAuthProvider';
-import { ExternalAuthConfig, ExternalAuthProvider } from '../services/igx-auth.service';
+import { ExternalAuthConfig } from '../services/external-auth.service';
 import { ExternalLogin } from '../models/login';
 
 export class FacebookProvider implements IAuthProvider {
@@ -48,5 +48,7 @@ export class FacebookProvider implements IAuthProvider {
         return Promise.resolve(this.user);
     }
 
-    public logout() { }
+    public logout() {
+        FB.logout((response) => {});
+    }
 }
