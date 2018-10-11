@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { OidcSecurityService, OidcConfigService } from 'angular-auth-oidc-client';
 
-import { IAuthProvider } from '../providers/IAuthProvider';
+import { AuthProvider } from '../providers/auth-provider';
 import { GoogleProvider } from '../providers/google-provider';
 import { FacebookProvider } from '../providers/facebook-provider';
 import { MicrosoftProvider } from '../providers/microsoft-provider';
@@ -39,7 +39,7 @@ export interface ExternalAuthConfig {
 })
 export class ExternalAuthService {
     protected activeProvider: ExternalAuthProvider;
-    protected providers: Map<ExternalAuthProvider, IAuthProvider> = new Map();
+    protected providers: Map<ExternalAuthProvider, AuthProvider> = new Map();
 
     constructor(
         private router: Router,

@@ -1,13 +1,3 @@
-.registration-title {
-    color: #66ccff;
-}
-
-button {
-    width: 100%;
-    background-color:#3399ff;
-    color: white;
-}
-
 form {
     display: flex;
     flex-flow: column;
@@ -18,10 +8,11 @@ form {
     }
 }
 
+button {
+    width: 100%;
+    margin-top: 10px;
+}
 
 a {
     cursor: pointer;
-}
-button {
-    margin-top: 10px;
 }

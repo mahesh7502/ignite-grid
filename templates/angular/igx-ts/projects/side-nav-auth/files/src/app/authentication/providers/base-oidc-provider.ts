@@ -5,12 +5,12 @@ import {
     AuthWellKnownEndpoints,
     OpenIDImplicitFlowConfiguration
 } from 'angular-auth-oidc-client';
-import { IAuthProvider } from './IAuthProvider';
+import { AuthProvider } from './auth-provider';
 import { ExternalAuthConfig } from '../services/external-auth.service';
 import { ExternalLogin } from '../models/login';
 
 /** Base provider for OpenID Connect (OIDC) https://openid.net/connect/ */
-export abstract class BaseOidcProvider implements IAuthProvider {
+export abstract class BaseOidcProvider implements AuthProvider {
     constructor(protected oidcConfigService: OidcConfigService, protected oidcSecurityService: OidcSecurityService,
         protected externalStsConfig: ExternalAuthConfig) {
     }

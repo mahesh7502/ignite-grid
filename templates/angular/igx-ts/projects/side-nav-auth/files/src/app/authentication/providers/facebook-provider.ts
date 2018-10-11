@@ -1,10 +1,10 @@
 import { Router } from '@angular/router';
 
-import { IAuthProvider } from './IAuthProvider';
+import { AuthProvider } from './auth-provider';
 import { ExternalAuthConfig } from '../services/external-auth.service';
 import { ExternalLogin } from '../models/login';
 
-export class FacebookProvider implements IAuthProvider {
+export class FacebookProvider implements AuthProvider {
     private user: ExternalLogin;
 
     constructor(private externalStsConfig: ExternalAuthConfig, private router: Router) { }
