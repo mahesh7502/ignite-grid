@@ -1,25 +1,35 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { data } from "./data";
 
-import { IgxGridComponent, IgxGridTransaction, IgxToggleDirective,
-	Transaction, IgxTransactionService } from "igniteui-angular";
+import { IgxDialogComponent, IgxGridComponent, Transaction } from "igniteui-angular";
 
 @Component({
 	selector: 'app-$(filePrefix)',
-	styleUrls: ['./$(filePrefix).component.css'],
-	templateUrl: './$(filePrefix).component.html',
-	providers: [{ provide: IgxGridTransaction, useClass: IgxTransactionService }]
+	styleUrls: ['./$(filePrefix).component.scss'],
+	templateUrl: './$(filePrefix).component.html'
 })
-export class $(ClassName)Component {
+export class $(ClassName)Component implements OnInit {
 	@ViewChild("gridRowEditTransaction", { read: IgxGridComponent }) public gridRowEditTransaction: IgxGridComponent;
-	@ViewChild(IgxToggleDirective) public toggle: IgxToggleDirective;
+	@ViewChild(IgxDialogComponent) public dialog: IgxDialogComponent;
+	@ViewChild("dialogGrid", { read: IgxGridComponent }) public dialogGrid: IgxGridComponent;
 
-    public data: any[];
-    private addProductId: number;
+	public currentActiveGrid: { id: string, transactions: any[] } = { id: "", transactions: [] };
+
+	public data: any[];
+	public transactionsData: Transaction[] = [];
+	private addProductId: number;
+	
   constructor() {
 	this.data = data;
 	this.addProductId = this.data.length + 1;
    }
+
+   public ngOnInit(): void {
+	this.transactionsData = this.gridRowEditTransaction.transactions.getAggregatedChanges(true);
+	this.gridRowEditTransaction.transactions.onStateUpdate.subscribe(() => {
+		this.transactionsData = this.gridRowEditTransaction.transactions.getAggregatedChanges(true);
+	});
+}
 
    public addRow(gridID) {
 		this.gridRowEditTransaction.addRow({
@@ -50,17 +60,50 @@ export class $(ClassName)Component {
 		this.gridRowEditTransaction.transactions.redo();
 	}
 
+	public openCommitDialog() {
+        this.dialog.open();
+        this.dialogGrid.reflow();
+    }
+
 	public commit() {
 		this.gridRowEditTransaction.transactions.commit(this.data);
-		this.toggle.close();
+		this.dialog.close();
 	}
 
 	public cancel() {
-		this.gridRowEditTransaction.transactions.clear();
-		this.toggle.close();
+		this.dialog.close();
 	}
+
+	public discard() {
+        this.gridRowEditTransaction.transactions.clear();
+        this.dialog.close();
+	}
+	
+	public stateFormatter(value: string) {
+        return JSON.stringify(value);
+	}
+	
+	public typeFormatter(value: string) {
+        return value.toUpperCase();
+    }
 
 	private getRandomInt(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
+
+	private classFromType(type: string): string {
+        return `transaction--${type.toLowerCase()}`;
+	}
+	
+	public get undoEnabled(): boolean {
+        return this.gridRowEditTransaction.transactions.canUndo;
+	}
+	
+	public get redoEnabled(): boolean {
+        return this.gridRowEditTransaction.transactions.canRedo;
+	}
+	
+	public get hasTransactions(): boolean {
+        return this.gridRowEditTransaction.transactions.getAggregatedChanges(false).length > 0;
+    }
 }
