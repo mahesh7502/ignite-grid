@@ -7,20 +7,20 @@ import { IgxComboComponent  } from 'igniteui-angular';
   styleUrls: ['./$(filePrefix).component.css']
 })
 
-export class $(ClassName)Component{
-	public user = {
+export class $(ClassName)Component {
+    public user = {
         dateTime: new Date(),
-        email: "",
-        fullName: "",
-        genres: "",
-        phone: ""
+        email: '',
+        fullName: '',
+        genres: '',
+        phone: ''
     };
 
-    public genres = ["Action", "Adventure", "Comedy", "Crime",
-        "Drama", "Historical", "Horror", "Mistery",
-        "Musical", "Romance", "Sci-Fi", "Thriller", "Western"];
+    public genres = ['Action', 'Adventure', 'Comedy', 'Crime',
+        'Drama', 'Historical', 'Horror', 'Mistery',
+        'Musical', 'Romance', 'Sci-Fi', 'Thriller', 'Western'];
 
-    @ViewChild("combo1", { read: IgxComboComponent })
+    @ViewChild('combo1', { read: IgxComboComponent })
     private combo1: IgxComboComponent;
 
     public onDateSelection(value) {
