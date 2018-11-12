@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { data } from "./data";
 
-import { IgxDialogComponent, IgxGridComponent, Transaction } from "igniteui-angular";
+import { IgxDialogComponent, IgxGridComponent, IgxGridTransaction, IgxTransactionService, Transaction } from "igniteui-angular";
 
 @Component({
+	providers: [{ provide: IgxGridTransaction, useClass: IgxTransactionService }],
 	selector: 'app-$(filePrefix)',
 	styleUrls: ['./$(filePrefix).component.scss'],
 	templateUrl: './$(filePrefix).component.html'

@@ -2,7 +2,6 @@
 <p>You can read more about configuring the igx-grid component in the 
 <a href="https://github.com/IgniteUI/igniteui-angular/blob/master/projects/igniteui-angular/src/lib/grid/README.md" target="_blank">README</a> or the 
 <a href="https://www.infragistics.com/products/ignite-ui-angular/angular/components/grid.html" target="_blank">official documentation</a>.</p>
-<app-grid-with-transactions>
 <igx-grid #gridRowEditTransaction [data]="data" [primaryKey]="'ProductID'" width="900px" height="500px"
     [rowEditable]="true" [allowFiltering]="true">
     <igx-column [pinned]="true" [filterable]="false">
@@ -27,7 +26,6 @@
     <igx-column field="CategoryID" header="Category ID" [dataType]="'number'" [filterable]="false"></igx-column>
     <igx-column field="Discontinued" header="Discontinued" [dataType]="'boolean'" [pinned]="true" [filterable]="false"></igx-column>
 </igx-grid>
-</app-grid-with-transactions>
 <div class="buttons-row">
     <button igxButton (click)="addRow('gridRowEditTransaction')">Add Row</button>
     <div class="buttons-wrapper">
