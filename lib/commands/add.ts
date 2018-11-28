@@ -102,10 +102,9 @@ command = {
 	},
 	async addTemplate(fileName: string, template: Template, modulePath?: string): Promise<boolean> {
 		const parts = path.parse(fileName);
-		let name = fileName;
-		if (parts.dir) {
-			name = parts.base;
-		}
+		fileName = fileName.replace(/\\/g, "/"); 	//TODO: Last update..Fix here or in folderName
+		fileName = Util.stripFileExtension(fileName);
+		let name = parts.dir ? parts.name : fileName;
 		// trim name to avoid creating awkward paths or mismatches:
 		name = name.trim();
 
@@ -117,9 +116,9 @@ command = {
 			return false;
 		}
 
-		if (await template.generateFiles(process.cwd(), fileName, { modulePath })) {
+		if (await template.generateFiles(process.cwd(), fileName, { modulePath })) {//1fix name here (remove folder portion)
 			//successful
-			template.registerInProject(process.cwd(), fileName, { modulePath });
+			template.registerInProject(process.cwd(), fileName, { modulePath }); //fix  name here as well (remove folder portion)(не).
 			command.templateManager.updateProjectConfiguration(template);
 			template.packages.forEach(x => PackageManager.queuePackage(x));
 			Util.log(`${Util.greenCheck()} View '${name}' added.`);

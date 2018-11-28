@@ -203,6 +203,51 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Add Combo to Folder",
+			"cwd": "${workspaceRoot}/output/angularproj",
+			"program": "${workspaceRoot}/bin/execute.js",
+			"console": "externalTerminal",
+			"preLaunchTask": "build",
+			"outFiles": ["${workspaceFolder}/**/*.js"],
+			"args": [
+				"add",
+				"--template=combo",
+				"--name=folder/comboToFolder22"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Add Combo file to Folder",
+			"cwd": "${workspaceRoot}/output/angularproj",
+			"program": "${workspaceRoot}/bin/execute.js",
+			"console": "externalTerminal",
+			"preLaunchTask": "build",
+			"outFiles": ["${workspaceFolder}/**/*.js"],
+			"args": [
+				"add",
+				"--template=combo",
+				"--name=folder/comboExtension.ts"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Add Combo file to nested Folders",
+			"cwd": "${workspaceRoot}/output/testFolder",
+			"program": "${workspaceRoot}/bin/execute.js",
+			"console": "externalTerminal",
+			"preLaunchTask": "build",
+			"outFiles": ["${workspaceFolder}/**/*.js"],
+			"args": [
+				"add",
+				"--template=combo",
+				"--name=folder1/folder2/comboExtension"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Launch Wizard Reactproj",
 			"cwd": "${workspaceRoot}/output/reactproj",
 			"program": "${workspaceRoot}/bin/execute.js",
