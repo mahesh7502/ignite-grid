@@ -44,8 +44,8 @@ export class IgniteUIForAngularTemplate extends AngularTemplate {
 		const routingModule = new TsUpdate(path.join(projectPath, "src/app/app-routing.module.ts"));
 		routingModule.addRoute(
 			path.join(projectPath, `src/app/${this.folderName(name)}/${this.fileName(name)}.component.ts`),
-			name,                 //linkPath: "folder1/folder2/combo"
-			this.fileName(name)   //linkText: "combo"
+			Util.lowerDashed(this.fileName(name)), // make sure no % for spaces in url.
+			this.fileName(name)
 		);
 
 		//3) add an import of the component class from its file location.

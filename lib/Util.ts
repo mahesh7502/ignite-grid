@@ -426,11 +426,6 @@ class Util {
 		return defaultName;
 	}
 
-	public static stripFileExtension(text: string) {
-		const strippedText = text.indexOf(".") ? text.slice(0, text.indexOf(".")) : text;
-		return strippedText;
-	}
-
 	private static propertyByPath(object: any, propPath: string) {
 		if (!propPath) {
 			return object;

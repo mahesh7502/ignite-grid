@@ -129,8 +129,6 @@ export class AngularTemplate implements Template {
 		const parts = path.parse(pathName);
 		let folderName = pathName;
 		if (parts.dir) {
-			// folderName = parts.base.replace(/\\/g, "/"); //TODO: Last update..Fix here or in addTemplate
-			//TODO: make sure it works with nested folders as well.
 			folderName = parts.dir;
 			// TODO: config-based "src/app"?
 			const relative = path.join(process.cwd(), "src/app", folderName);

@@ -102,8 +102,8 @@ command = {
 	},
 	async addTemplate(fileName: string, template: Template, modulePath?: string): Promise<boolean> {
 		const parts = path.parse(fileName);
-		fileName = fileName.replace(/\\/g, "/"); 	//TODO: Last update..Fix here or in folderName
-		fileName = Util.stripFileExtension(fileName);
+		fileName = parts.ext ? path.join(parts.dir, parts.name) : fileName;
+		fileName = fileName.replace(/\\/g, "/");
 		let name = parts.dir ? parts.name : fileName;
 		// trim name to avoid creating awkward paths or mismatches:
 		name = name.trim();
