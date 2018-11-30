@@ -116,9 +116,9 @@ command = {
 			return false;
 		}
 
-		if (await template.generateFiles(process.cwd(), fileName, { modulePath })) {//1fix name here (remove folder portion)
+		if (await template.generateFiles(process.cwd(), fileName, { modulePath })) {
 			//successful
-			template.registerInProject(process.cwd(), fileName, { modulePath }); //fix  name here as well (remove folder portion)(не).
+			template.registerInProject(process.cwd(), fileName, { modulePath });
 			command.templateManager.updateProjectConfiguration(template);
 			template.packages.forEach(x => PackageManager.queuePackage(x));
 			Util.log(`${Util.greenCheck()} View '${name}' added.`);

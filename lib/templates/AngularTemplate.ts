@@ -34,7 +34,7 @@ export class AngularTemplate implements Template {
 		if (options["extraConfig"]) {
 			config = options["extraConfig"];
 		}
-		Object.assign(config, this.getBaseVariables(name)); //1fix name here (remove folder portion)
+		Object.assign(config, this.getBaseVariables(name));
 
 		const pathsConfig = {};
 		if (!Util.validateTemplate(path.join(this.rootPath, "files"), projectPath, config, pathsConfig)) {
