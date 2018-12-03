@@ -44,7 +44,7 @@ export class IgniteUIForAngularTemplate extends AngularTemplate {
 		const routingModule = new TsUpdate(path.join(projectPath, "src/app/app-routing.module.ts"));
 		routingModule.addRoute(
 			path.join(projectPath, `src/app/${this.folderName(name)}/${this.fileName(name)}.component.ts`),
-			Util.lowerDashed(this.fileName(name)), // make sure no % for spaces in url.
+			this.fileName(name),
 			this.fileName(name)
 		);
 
